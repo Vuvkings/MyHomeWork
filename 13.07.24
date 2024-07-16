@@ -1,1 +1,116 @@
+#include <iostream>
+#include <ctime>
 
+#define rand(a,b) a+rand()%(b+1-a)
+using namespace std;
+class Car {
+private:
+	string modelCar;
+	string colourCar;
+public:
+	Car(string modelCar, string colourCar) {
+		this->modelCar = modelCar;
+		this->colourCar = colourCar;
+	}
+	void showCar() const {
+
+		cout << " Model: " << modelCar <<
+			" Colour: " << colourCar << endl;
+	}
+
+
+};
+class Garage {
+private:
+	int numberGarage;
+	int sizeGarage;
+	int quantityCars;
+
+	Car** cars = nullptr;
+public:
+	Garage(int numberGarage, int sizeGarage) {
+		this->numberGarage = numberGarage;
+		this->sizeGarage = sizeGarage;
+	}
+	int getNumber() const {
+		return this->numberGarage;
+	}
+
+	int getSizeGarage() const {
+		return this->sizeGarage;
+	}
+	void addCar(Car* car) {
+		Car** buf = new Car * [quantityCars + 1];
+		for (int i = 0; i < quantityCars; i++) {
+			buf[i] = cars[i];
+
+		}
+		buf[quantityCars++] = car;
+		delete[]cars;
+		cars = buf;
+	}
+
+	void removeCar(int index) {
+		Car** buf = new Car * [quantityCars + 1];
+		for (int i = 0; i < quantityCars; i++) {
+			buf[i] = cars[i];
+
+		}
+		for (int i = index + 1; i < quantityCars; i++) {
+			buf[i - 1] = cars[i];
+		}
+
+		delete[]cars;
+		cars = buf;
+		quantityCars--;
+
+	}
+
+	void showGarage() const {
+
+		cout << " Number garage: " << numberGarage
+			<< "\n There are still places left: " << sizeGarage << endl << endl;
+
+		if (quantityCars <= sizeGarage) {
+
+			for (int i = 0; i < sizeGarage; ++i) {
+
+				cars[i]->showCar();
+			}
+			cout << endl;
+		}
+		else if (quantityCars > sizeGarage) {
+
+			int unnecessary = (quantityCars - sizeGarage);
+
+			for (int i = 0 ; i < sizeGarage; ++i) {
+
+				cars[i]->showCar();
+			}
+			cout << "\n " << unnecessary << " cars couldn't fit in the garage" << endl;
+			cout << endl;
+		}
+	}
+
+
+};
+
+
+int main() {
+
+	srand(time(NULL));
+	Garage garage(10, 5);
+	int countCars = 6;
+	const int count = 6;
+	string models[count]{ "Mercedes","Audi","BMW","Mazda","Acura","Porshe"};
+	string colours[count]{ "White","Green","Black","Yello","Blue","Purple"};
+	for (int i = 0; i < countCars; i++) {
+		garage.addCar(new Car(models[rand(0, count - 1)], colours[rand(0, count - 1)]));
+	}
+
+	garage.showGarage();
+	garage.removeCar(5);
+	garage.showGarage();
+
+	return 0;
+}
