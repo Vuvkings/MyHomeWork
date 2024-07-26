@@ -1,0 +1,239 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+struct Node {
+	T data;
+	Node<T>* next = nullptr;
+
+};
+
+template <typename T>
+class List {
+	Node<T>* head = nullptr;
+	int size = 0;
+
+public:
+	void pushBack(T data) {
+		Node<T>* newNode = new Node<T>{ data };
+		if (head == nullptr) {
+			head = newNode;
+		}
+		else {
+			//head - указатель на крайний первый элемент элемент
+			newNode->next = head;
+			head = newNode;
+		}
+		size++;
+	}
+	void push(T data, int index) {
+		Node<T>* newNode = new Node<T>{ data };
+		Node<T>* iterator = head;
+		for (int i = 0; i < index - 1; i++) {
+			iterator = iterator->next;
+		}
+		newNode->next = iterator->next;
+		iterator->next = newNode;
+		size++;
+	}
+	void popBack() {
+
+		Node<T>* iterator = head;
+		for (int i = 0; i < size - 2; i++) {
+			iterator = iterator->next;
+		};
+		delete[] iterator->next;
+		iterator->next = nullptr;
+		size--;
+
+	}
+	void popFront() {
+		Node<T>* buf = head;
+
+		head = head->next;
+		delete[] buf;
+		size--;
+	}
+
+	void popIndex(int index) {
+		Node<T>* iterator = head;
+		for (int i = 0; i < index - 1; i++) {
+			iterator = iterator->next;
+		}
+		Node<T>* buf = iterator->next;
+		iterator->next = iterator->next->next;
+		delete[] buf;
+		size--;
+	}
+
+	int getSize() {
+		return size;
+	}
+
+	bool isEmpty() {
+		return !size;
+	}
+
+	void showAll() {
+		if (head != nullptr) {
+			Node<T>* iterator = head;
+			while (iterator->next != nullptr) {
+				cout << iterator->data;
+				iterator = iterator->next;
+			}
+			cout << iterator->data << " ";
+
+		}
+
+
+	}
+};
+
+template <typename T>
+class Stack {
+private:
+	int* st;
+	int size=0;
+	int MaxLength;
+public:
+	Stack(int m) {
+		MaxLength = m;
+		st = new int[MaxLength];
+
+	}
+	
+	bool IsFull() {
+		return size == MaxLength;
+	}
+	
+	/*int top() {
+		return st[top];
+	}*/
+
+	void push(int numb) {
+		if (!IsFull());
+		 st[size++] = numb;
+	}
+
+	int pop() {
+		if (!Empty())
+			
+			return st[size--];
+		else return 0;
+	}
+
+	bool Empty() {
+		return size == 0;
+	}
+
+	void Show() {
+		for (int i = 0; i < size; i++) {
+			cout << st[i] << " ";
+		}
+		cout << endl;
+	}
+	int top() {
+		return st[size];
+	}
+	
+};
+
+
+template <typename T>
+class Queue {
+	int* Wait;
+	//Максимальный размер очереди
+	int MaxQueueLength;
+	//Текущий размер очереди
+	int QueueLength;
+public:
+	Queue(int m) {
+		MaxQueueLength = m;
+		//создаем очередь
+		Wait = new int[MaxQueueLength];
+		//Изначально очередь пуста
+		QueueLength = 0;
+	}
+	void push(int c) {
+		if (!IsFull())
+			Wait[QueueLength++] = c;
+	}
+	//Извлечение элемента
+	int pop() {
+		if (!Empty()) {
+			int temp = Wait[0];
+			//сдвинуть все элементы
+			for (int i = 1; i < QueueLength; i++)
+				Wait[i - 1] = Wait[i];
+			QueueLength--;
+			//вернуть первый(нулевой)
+			return temp;
+		}
+		else //Если в стеке элементов нет
+			return -1;
+	}
+	//Очистка очереди
+	void Clear() {
+		QueueLength = 0;
+
+	}
+	//Проверка существования элементов в очереди
+	bool Empty() {
+		return QueueLength == 0;
+	}
+	//Проверка на переполнение очереди
+	bool IsFull() {
+		return QueueLength == MaxQueueLength;
+	}
+	int GetCount() {
+		return QueueLength;
+	}
+	//демонстрация очереди
+	void Show() {
+		for (int i = 0; i < QueueLength; i++) {
+			cout << Wait[i] << " ";
+		}
+		cout << endl;
+	}
+	~Queue()
+	{
+		delete[]Wait;
+	}
+};
+
+int main() {
+	cout << "Queue" << endl;
+	Queue<int> QU(10);
+	QU.push(1);
+	QU.push(2);
+	QU.push(3);
+	QU.Show();
+	QU.pop();
+	QU.Show();
+	
+	cout << "Stack" << endl;
+	Stack<int> St(10);
+	St.push(10);
+	St.push(12);
+	St.push(15);
+	St.push(16);
+	St.Show();
+	St.pop();
+	St.Show();
+
+	cout << "List" << endl;
+	List<int> list;
+
+	list.pushBack(9);
+	list.pushBack(2);
+	list.pushBack(4);
+
+	list.showAll();
+	//cout << list.getSize() << endl;;
+	//cout << list.isEmpty()<<endl;
+	list.push(5, 2);
+	list.showAll();
+	list.popBack();
+	list.showAll();
+	return 0;
+}
