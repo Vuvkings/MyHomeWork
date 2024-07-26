@@ -1,0 +1,154 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+struct Node {
+	T data;
+	Node<T>* next = nullptr;
+	Node<T>* prev = nullptr;
+};
+
+template <typename T>
+class List {
+	Node<T>* head = nullptr;
+	Node<T>* tail = nullptr;
+	int size = 0;
+public:
+	void pushFront(T data) {
+		Node<T>* newNode = new Node<T>{ data, head };
+		
+		if (head != nullptr) {
+			head-> prev = newNode;
+		}
+		head = newNode;
+		if (tail == nullptr) {
+			tail = newNode;
+		}
+		size++;
+
+	}
+
+	void pushBack(T data) {
+		Node<T>* newNode = new Node<T>{ data, nullptr ,tail };
+
+		if (tail != nullptr) {
+			tail->next = newNode;
+		}
+		tail = newNode;
+		if (head == nullptr) {
+			head = newNode;
+		}
+		size++;
+
+	}
+
+	
+	void insert(T data, int index) {
+		if (index<0 || index>size) return;
+		if (index == 0) {
+			pushFront(data);
+			return;
+		}
+		if (index == size) {
+			pushBack(data);
+			return;
+		}
+		if (size / 2 > index) {
+			Node<T>* iterator = head;
+			for (int i = 0; i < index - 1; i++) {
+				iterator = iterator->next;
+			}
+			Node<T>* newNode = new Node<T>{ data, iterator->next,iterator };
+			if (iterator->next != nullptr) {
+				iterator->next->prev = newNode;
+
+			}
+			iterator->next = newNode;
+
+		}
+		else {
+			Node<T>* iterator = tail;
+			for (int i = size; i > index + 1; i--) {
+				iterator = iterator->prev;
+			}
+			Node<T>* newNode = new Node<T>{ data, iterator,iterator->prev };
+			if (iterator->prev != nullptr) {
+				iterator->prev->next = newNode;
+
+			}
+			iterator->prev = newNode;
+
+		}
+		size++;
+	}
+	
+	void popBack() {
+		Node<T>* iterator = head;
+		for (int i = 0; i < size - 2; i++) {
+			iterator = iterator->next;
+		};
+		delete[] iterator->next;
+		iterator->next = nullptr;
+		size--;
+	}
+
+	void popFront() {
+		Node<T>* buf = head;
+		head = head->next;
+		delete[] buf;
+		size--;
+	}
+
+	void popIndex(int index) {
+		if (index<0 || index>size) return;
+		if (index == 0) {
+			popFront();
+			return;
+		}
+		if (index == size) {
+			popBack();
+			return;
+		}
+		Node<T>* iterator = head;
+		for (int i = 0; i < index - 1; i++) {
+			iterator = iterator->next;
+		}
+		Node<T>* buf = iterator->next;
+		iterator->next = iterator->next->next;
+		delete[] buf;
+		size--;
+	}
+
+	void showAll() {
+		Node<T>* iterator = head;
+		for (int i = 0; i < size; i++) {
+			cout << iterator->data;
+			iterator = iterator->next;
+		}
+		cout<<"\nsize" << size << endl;
+	}
+
+
+};
+
+
+int main() {
+	List<int> list;
+	list.pushFront(1);
+	list.pushFront(2);
+	list.showAll();
+	
+	list.pushBack(3);
+	list.pushBack(4);
+	list.showAll();
+	
+	list.insertHead(5, 3);
+	list.showAll();
+	list.popBack();
+	list.showAll();
+	list.popIndex(2);
+	list.showAll();
+	list.popFront();
+	list.showAll();
+	return 0;
+}
