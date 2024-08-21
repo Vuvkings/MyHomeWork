@@ -1,0 +1,10 @@
+1; Tom; Gavrilov; 7 days
+2; Tom; Ivanov; 180 days
+3; Pavel; Samian; 360 days
+4; Pavel; Roth; 30 days
+5; Vasily; Samian; 7 days
+6; Pavel; Jonson; 30 days
+7; Ivan; Gavrilov; 7 days
+8; Pavel; Ivanov; 30 days
+9; Ivan; Reshetov; 180 days
+10; Oleg; Gavrilov; 30 days
