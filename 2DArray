@@ -1,1 +1,82 @@
+#include <iostream>
+using namespace std;
 
+int const n = 5;
+int const m = 4;
+
+int gen_rand(int a, int b) {
+    return rand() % (b + 1 - a) + a;
+}
+
+void genRandarr2D(int size, int arr[][n], int a, int b) {
+    for (int j = 0; j < n; j++) {
+        for (int k = 0; k < size; k++) {
+            arr[k][j] = gen_rand(a, b);
+        }
+
+    }
+
+}
+
+void showArr2D(int size, int arr[][n]) {
+    int x = 0;
+    int y = 0;
+    for (int j = 0; j < n; j++) {
+        for (int k = 0; k < size; k++) {
+            cout << arr[k][j] << "\t";
+            x += arr[k][j];
+        }
+        cout << "| " << x;
+        cout << endl << endl;
+    }
+    for (int k = 0; k < size; k++) {
+        for (int j = 0; j < n; j++) {
+            y += arr[k][j];
+
+        }
+        cout << y << "\t";
+    }
+    cout << endl;
+}
+
+void showMinMax(int size, int arr[][n]) {
+    int max = arr[0][0];
+    int min = arr[0][0];
+    int idmaxX = 0;
+    int idminX = 0;
+    int idmaxY = 0;
+    int idminY = 0;
+
+    for (int j = 0; j < n; j++) {
+        for (int k = 1; k < size; k++) {
+            if (max < arr[k][j]) {
+                max = arr[k][j];
+                idmaxX = k;
+                idmaxY = j;
+            }
+
+            if (min > arr[k][j]) {
+                min = arr[k][j];
+                idminX = k;
+                idminY = j;
+            }
+        }
+
+    }
+
+    cout << "Максимальное значение " << max << " строка " << idmaxX + 1 << " столбец " << idmaxY + 1 << endl;
+    cout << "Минимальное  значение " << min << " строка " << idminX + 1 << " столбец " << idminY + 1 << endl;
+}
+
+int main() {
+    srand(time(NULL));
+    setlocale(LC_ALL, "rus");
+    int arr[m][n];
+    int const size = m;
+    int a[size];
+
+
+    genRandarr2D(m, arr, 10, 99);
+    showArr2D(m, arr);
+    showMinMax(m, arr);
+}
